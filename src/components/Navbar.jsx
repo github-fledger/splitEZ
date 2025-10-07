@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   AuthenticatedTemplate,
   UnauthenticatedTemplate,
@@ -11,6 +12,7 @@ import {
   Drawer,
   Fade,
   IconButton,
+  InputBase,
   Slide,
   Toolbar,
   Tooltip,
@@ -22,6 +24,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import BrandLogo from "./BrandLogo";
 import DrawerList from "./DrawerList";
 import { loginRequest } from "../auth/authConfig";
+import { useSearch } from "../hooks/useSearch";
 
 const drawerWidth = 240;
 
@@ -29,6 +32,9 @@ const Navbar = ({ window, navItems }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const handleDrawerToggle = () => setMobileOpen((prev) => !prev);
   const container = window ? () => window().document.body : undefined;
+  const [showSearch, setShowSearch] = useState(false);
+  const navigate = useNavigate();
+  const { fetchSearchResults } = useSearch();
 
   const { instance } = useMsal();
 
@@ -47,6 +53,10 @@ const Navbar = ({ window, navItems }) => {
     } catch (error) {
       console.error("Logout error:", error);
     }
+  };
+
+  const handleSearch = () => {
+    setShowSearch((prev) => !prev);
   };
 
   return (
@@ -81,9 +91,38 @@ const Navbar = ({ window, navItems }) => {
 
               <Box>
                 <Tooltip title="Search">
-                  <IconButton size="large" color="inherit">
+                  <IconButton
+                    size="large"
+                    color="inherit"
+                    aria-label="search"
+                    onClick={handleSearch}
+                  >
                     <SearchIcon />
                   </IconButton>
+
+                  {showSearch && (
+                    <InputBase
+                      placeholder="Search…"
+                      sx={{
+                        ml: 1,
+                        color: "inherit",
+                        bgcolor: "rgba(255,255,255,0.1)",
+                        px: 2,
+                        borderRadius: 1,
+                      }}
+                      inputProps={{ "aria-label": "search" }}
+                      onKeyDown={async (e) => {
+                        if (e.key === "Enter") {
+                          const query = e.target.value.trim();
+                          if (query) {
+                            const results = await fetchSearchResults(query);
+                            console.log(results); // or pass to context/state
+                            navigate(`/search?q=${encodeURIComponent(query)}`);
+                          }
+                        }
+                      }}
+                    />
+                  )}
                 </Tooltip>
 
                 <AuthenticatedTemplate>
