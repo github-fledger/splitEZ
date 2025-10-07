@@ -1,36 +1,18 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useContext } from "react";
 import Spinner from "../components/Spinner";
-import { Container, Typography } from "@mui/material";
+import {
+  Container,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import { AppSearchContext } from "../context/AppSearchContext.jsx";
 
 const SearchResultsPage = () => {
-  const [searchParams] = useSearchParams();
-  const query = searchParams.get("q");
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { query, results, loading, error } = useContext(AppSearchContext);
 
-  useEffect(() => {
-    if (!query) return;
-
-    const fetchResults = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-        const data = await res.json();
-        setResults(data);
-      } catch (err) {
-        console.error("Search error:", err);
-        setError("Something went wrongx.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchResults();
-  }, [query]);
-
-  if (!query) return <Typography>No search query provided.</Typography>;
+  if (!query) return <Typography>No search query providedxx.</Typography>;
   if (loading) return <Spinner />;
   if (error) return <Typography color="error">{error}</Typography>;
 

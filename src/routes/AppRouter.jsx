@@ -6,18 +6,18 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { mainSectionRoutes } from "../routes/routesConfig.jsx";
-import { AppDataProvider } from "../context/AppDataProvider.jsx";
 import MainLayout from "../layout/MainLayout";
 import MainSectionLayout from "../layout/MainSectionLayout";
 
 const AboutPage = lazy(() => import("../pages/AboutPage"));
+const AccountPage = lazy(() => import("../pages/AccountPage"));
 const ExpensesPage = lazy(() => import("../pages/ExpensesPage"));
 const GroupsPage = lazy(() => import("../pages/GroupsPage"));
 const HomePage = lazy(() => import("../pages/HomePage"));
 const LoginPage = lazy(() => import("../pages/LoginPage"));
 const NotFoundPage = lazy(() => import("../pages/NotFoundPage"));
 const ResultPage = lazy(() => import("../pages/ResultPage"));
-const AccountPage = lazy(() => import("../pages/AccountPage"));
+const SearchResultsPage = lazy(() => import("../pages/SearchResultsPage"));
 
 const AppRouter = () => {
   const router = createBrowserRouter(
@@ -32,6 +32,7 @@ const AppRouter = () => {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/search" element={<SearchResultsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     ),
@@ -41,9 +42,9 @@ const AppRouter = () => {
   );
 
   return (
-    <AppDataProvider>
+    <>
       <RouterProvider router={router} />
-    </AppDataProvider>
+    </>
   );
 };
 

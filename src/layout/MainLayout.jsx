@@ -1,8 +1,10 @@
 import { Outlet } from "react-router";
-import { ToastContainer } from "react-toastify";
 import { useLocation, matchPath } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { useTheme } from "@mui/material/styles";
 import { Box, Container, Toolbar } from "@mui/material";
+import { AppDataProvider } from "../context/AppDataProvider";
+import { AppSearchProvider } from "../context/AppSearchProvider";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -24,36 +26,40 @@ const MainLayout = () => {
 
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          minHeight: "100vh",
-        }}
-      >
-        <ToastContainer />
-        <Toolbar />
+      <AppDataProvider>
+        <AppSearchProvider>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              minHeight: "100vh",
+            }}
+          >
+            <ToastContainer />
+            <Toolbar />
 
-        <Navbar navItems={navItems} />
+            <Navbar navItems={navItems} />
 
-        <Box component="main" sx={{ flexGrow: 1 }}>
-          <Outlet />
-        </Box>
+            <Box component="main" sx={{ flexGrow: 1 }}>
+              <Outlet />
+            </Box>
 
-        <Box
-          component="footer"
-          sx={{
-            bgcolor: theme.palette.background.footerBg,
-            color: "primary.contrastText",
-            pt: 1,
-            pb: 3,
-          }}
-        >
-          <Container maxWidth="xl">
-            <Footer navItems={navItems} currentTab={currentTab} />
-          </Container>
-        </Box>
-      </Box>
+            <Box
+              component="footer"
+              sx={{
+                bgcolor: theme.palette.background.footerBg,
+                color: "primary.contrastText",
+                pt: 1,
+                pb: 3,
+              }}
+            >
+              <Container maxWidth="xl">
+                <Footer navItems={navItems} currentTab={currentTab} />
+              </Container>
+            </Box>
+          </Box>
+        </AppSearchProvider>
+      </AppDataProvider>
     </>
   );
 };
